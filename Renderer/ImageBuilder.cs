@@ -10,7 +10,7 @@ public static class ImageBuilder
         Console.WriteLine("Image build started");
         Console.WriteLine("");
         
-        const int numOfLines = 256 * 256 + 3;
+        var numOfLines = (width * height) + 3;
         var lines = new string[numOfLines];
         
         // PPM header information

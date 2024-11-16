@@ -2,7 +2,14 @@
 
 using Renderer;
 
-const int imageWidth = 256;
-const int imageHeight = 256;
+const float aspectRatio = 16f / 9f;
+
+// Calculate image dimensions based on the aspect ratio
+// TODO: ADD CHECK FOR INVALID DIMENSIONS
+var imageWidth = 400;
+var imageHeight = (int)(imageWidth / aspectRatio);
+
+float viewportHeight = 2f;
+float viewportWidth = viewportHeight * ((float) imageWidth / imageHeight);
 
 ImageBuilder.BuildToFile(imageWidth, imageHeight, "/output/image.ppm");
