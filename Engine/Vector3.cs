@@ -20,7 +20,7 @@ public class Vector3
         return new Vector3(0f, 0f, 0f);
     }
 
-    public float Dot(Vector3 a, Vector3 b)
+    public static float Dot(Vector3 a, Vector3 b)
     {
         return
             a.X() * b.X() +
@@ -36,9 +36,9 @@ public class Vector3
             a.X() * b.Y() - a.Y() * b.X());
     }
 
-    public Vector3 Unit(Vector3 a)
+    public Vector3 Unit()
     {
-        return a / a.Length();
+        return this / Length();
     }
     
     public static Vector3 operator + (Vector3 a, Vector3 b)

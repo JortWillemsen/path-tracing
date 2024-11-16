@@ -4,17 +4,17 @@ namespace Engine;
 
 public class Ray
 {
-    private readonly Point _origin;
-    private readonly Vector3 _direction;
+    public Point Origin { get; private set; }
+    public Vector3 Direction { get; private set; }
     
     public Ray(Point origin, Vector3 direction)
     {
-        _origin = origin;
-        _direction = direction;
+        Origin = origin;
+        Direction = direction;
     }
 
     public Point At(float t)
     {
-        return _origin + t * _direction;
+        return Origin + t * Direction;
     }
 }
