@@ -48,7 +48,7 @@ public class Sphere : Hittable
         }
 
         // We do hit
-        return new SuccessRecord(root, r.At(root), (r.At(root) - Center) / Radius);
+        return new SuccessRecord(root, r.At(root), (r.At(root) - Center) / Radius, r);
 
     }
 }

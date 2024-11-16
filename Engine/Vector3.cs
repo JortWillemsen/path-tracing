@@ -57,6 +57,11 @@ public class Vector3
             a.Z() - b.Z());
     }
 
+    public static Vector3 operator -(Vector3 a)
+    {
+        return new Vector3(-a.X(), -a.Y(), -a.Z());
+    }
+
     public static Vector3 operator *(Vector3 a, Vector3 b)
     {
         return new Vector3(
