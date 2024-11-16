@@ -21,20 +21,20 @@ public class Sphere : Hittable
     public HitRecord Hit(Ray r, float tMin, float tMax)
     {
         // Calculate intersection point
-        var ip = Center - r.Origin;
+        var oc = Center - r.Origin;
 
         // Solve quadratic formula to determine hit
         var a = r.Direction.LengthSquared();
-        var h = Vector3.Dot(r.Direction, ip);
-        var c = r.Direction.LengthSquared() - Radius * Radius;
+        var h = Vector3.Dot(r.Direction, oc);
+        var c = oc.LengthSquared() - Radius * Radius;
 
-        var discriminant = h * h - a * c;
+        var discriminant = h*h - a*c;
 
         // No hit
         if (discriminant < 0)
             return new FailRecord();
 
-        var squaredDiscriminant =  (h - (float) Math.Sqrt(discriminant) ) / a;
+        var squaredDiscriminant =  (float) Math.Sqrt(discriminant);
 
         var root = (h - squaredDiscriminant) / a;
 
@@ -48,7 +48,11 @@ public class Sphere : Hittable
         }
 
         // We do hit
-        return new SuccessRecord(root, r.At(root), (r.At(root) - Center) / Radius, r);
+        return new SuccessRecord(
+            root, 
+            r.At(root), 
+            (r.At(root) - Center) / Radius, 
+            r);
 
     }
 }

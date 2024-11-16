@@ -5,9 +5,9 @@ using Color = Engine.Vector3;
 
 namespace Renderer;
 
-public static class ImageBuilder
+public static class ImageRenderer
 {
-    private static string[] Build(Viewport vp)
+    private static string[] Render(Viewport vp, Scene scene)
     {
         Console.WriteLine("Image build started");
         Console.WriteLine("");
@@ -38,7 +38,7 @@ public static class ImageBuilder
                 var rayDir = pixelCenter - vp.Cam.Location;
                 var r = new Ray(vp.Cam.Location, rayDir);
 
-                var color = RayColor(r);
+                var color = RayColor(r, scene);
         
                 lines[j * vp.Cam.ImageWidth + 3 + i] = WriteColor(color);
             }
@@ -47,11 +47,11 @@ public static class ImageBuilder
         return lines;
     }
 
-    public static void BuildToFile(Viewport vp, string fileName)
+    public static void RenderToFile(Viewport vp, Scene scene, string fileName)
     {
         var path = Directory.GetCurrentDirectory() + fileName;
         
-        var lines = Build(vp);
+        var lines = Render(vp, scene);
         using var outputFile = new StreamWriter(path);
         foreach (var line in lines)
         {
@@ -77,19 +77,18 @@ public static class ImageBuilder
 
     }
     
-    static Color RayColor(Ray r)
+    static Color RayColor(Ray r, Scene scene)
     {
-        var sphere = new Sphere(new Vector3(0f, 0f, -1f), 1f);
-        var hit = sphere.Hit(r, 0f, float.MaxValue);
+        var hit = scene.Hit(r, 0f, Utils.Infinity);
         
         if (hit is SuccessRecord success)
         {
-            return 0.5f * new Color(success.Normal.X() + 1, success.Normal.Y() + 1, success.Normal.Z() + 1);
+            return 0.5f * (success.Normal + new Vector3(1f, 1f, 1f));
         }
         
         var unitDir = Vector3.Unit(r.Direction);
 
         var a = .5f * (unitDir.Y() + 1f);
-        return (1f - a) * new Color(1f, 1f, 1f) + a * new Color(.5f, .6f, 1f );
+        return (1f - a) * new Color(1f, 1f, 1f) + a * new Color(.5f, .7f, 1f );
     }
 }

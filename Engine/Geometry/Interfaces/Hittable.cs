@@ -24,8 +24,9 @@ public class SuccessRecord : HitRecord
 
     public void SetFaceNormal(Vector3 outwardNormal, Ray r)
     {
-        FrontFacing = Vector3.Dot(r.Direction, outwardNormal) < 0;
-        Normal = FrontFacing ? outwardNormal : -outwardNormal;
+        var ff = Vector3.Dot(r.Direction, outwardNormal) < 0;
+        FrontFacing = ff;
+        Normal = ff ? outwardNormal : -outwardNormal;
     }
 }
 

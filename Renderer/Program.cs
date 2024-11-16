@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Engine;
+using Engine.Geometry;
 using Renderer;
 
 using Color = Engine.Vector3;
@@ -21,5 +22,10 @@ var camera = new Camera(imageWidth, imageHeight, focalLength, Vector3.Zero());
 
 var viewport = new Viewport(aspectRatio, viewportHeight, camera);
 
-ImageBuilder.BuildToFile(viewport, "/output/image.ppm");
+var sphere1 = new Sphere(new Vector3(0f, 0f, -1f), 0.5f);
+var sphere2 = new Sphere(new Vector3(0f, -100.5f, -1f), 100f);
+
+var scene = new Scene(sphere1, sphere2);
+
+ImageRenderer.RenderToFile(viewport, scene, "/output/image.ppm");
 
