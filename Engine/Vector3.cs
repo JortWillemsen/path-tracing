@@ -2,17 +2,17 @@ namespace Engine;
 
 public class Vector3
 {
-    public float[] E = new float[3] { 0, 0, 0};
+    private readonly float[] _e = new float[3] { 0, 0, 0};
 
-    public float X() { return E[0]; }
-    public float Y() { return E[1]; }
-    public float Z() { return E[2]; }
+    public float X() { return _e[0]; }
+    public float Y() { return _e[1]; }
+    public float Z() { return _e[2]; }
 
     public Vector3(float x, float y, float z)
     {
-        this.E[0] = x;
-        this.E[1] = y;
-        this.E[2] = z;
+        this._e[0] = x;
+        this._e[1] = y;
+        this._e[2] = z;
     }
 
     public float Dot(Vector3 a, Vector3 b)
@@ -90,12 +90,12 @@ public class Vector3
 
     public float LengthSquared()
     {
-        return E[0] * E[0] + E[1] * E[1] + E[2] * E[2];
+        return _e[0] * _e[0] + _e[1] * _e[1] + _e[2] * _e[2];
     }
 
     public override string ToString()
     {
-        return E[0] + " " + E[1] + " " + E[2];
+        return _e[0] + " " + _e[1] + " " + _e[2];
     }
 }
 
