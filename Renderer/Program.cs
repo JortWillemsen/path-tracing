@@ -26,5 +26,5 @@ var sphere2 = new Sphere(new Vector3(0f, -50.5f, -1f), 50f);
 
 var scene = new Scene(sphere1, sphere2);
 
-ImageRenderer.RenderToFile(camera, scene, "/output/image_diffused_lambertian.ppm");
+ImageRenderer.RenderToFile(camera, scene, "/output/" + args[0]);
 

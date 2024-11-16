@@ -70,6 +70,10 @@ public static class ImageRenderer
         var r = pixel.X();
         var g = pixel.Y();
         var b = pixel.Z();
+
+        r = LinearToGamma(r);
+        g = LinearToGamma(g);
+        b = LinearToGamma(b);
         
         var intensity = new Interval(0f, 0.999f);
         
@@ -78,6 +82,15 @@ public static class ImageRenderer
         int bByte = (int) (256 * intensity.Clamp(b));
 
         return string.Join(" ", rByte, gByte, bByte);
+    }
 
+    public static float LinearToGamma(float x)
+    {
+        if (x > 0)
+        {
+            return (float) Math.Sqrt(x);
+        }
+
+        return 0;
     }
 }
