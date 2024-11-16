@@ -25,5 +25,5 @@ var sphere2 = new Sphere(new Vector3(0f, -100.5f, -1f), 100f);
 
 var scene = new Scene(sphere1, sphere2);
 
-ImageRenderer.RenderToFile(camera, scene, "/output/image.ppm");
+ImageRenderer.RenderToFile(camera, scene, "/output/image_aliased4.ppm");
 

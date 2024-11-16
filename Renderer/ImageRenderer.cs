@@ -20,6 +20,8 @@ public static class ImageRenderer
         lines[1] = cam.ImageWidth + " " + cam.ImageHeight;
         lines[2] = "255";
 
+        var samplesPerPixel = 100;
+        
         for (var j = 0; j < cam.ImageHeight; j++)
         {
             var curCursorLine = Console.CursorTop;
@@ -30,17 +32,19 @@ public static class ImageRenderer
             Console.SetCursorPosition(0, Console.CursorTop);
             
             // Writing new progress line
-            Console.Write("Lines remaining: " + (cam.ImageHeight - j) + " of " + numOfLines);
+            Console.Write("Lines remaining: " + (cam.ImageHeight - j) + " of " + cam.ImageHeight);
             
             for (var i = 0; i < cam.ImageWidth; i++)
             {
-                var pixelCenter = cam.Pixel0 + (i * cam.PixelDeltaU) + (j * cam.PixelDeltaV);
-                var rayDir = pixelCenter - cam.Origin;
-                var r = new Ray(cam.Origin, rayDir);
+                var pixelColor = Color.Zero();
 
-                var color = RayColor(r, scene);
-        
-                lines[j * cam.ImageWidth + 3 + i] = WriteColor(color);
+                for (int sample = 0; sample < samplesPerPixel; sample++)
+                {
+                    var r = cam.GetRay(i, j);
+                    pixelColor += RayColor(r, scene);
+                }
+                
+                lines[j * cam.ImageWidth + 3 + i] = WriteColor(1f / samplesPerPixel * pixelColor);
             }
         }
 

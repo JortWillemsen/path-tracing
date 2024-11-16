@@ -35,4 +35,21 @@ public class Camera
     public Vector3 UpperLeft => Origin - new Vector3(0f, 0f, FocalLength) - U / 2 - V / 2;
 
     public Vector3 Pixel0 => UpperLeft + .5f * (PixelDeltaU + PixelDeltaV);
+    
+    public Ray GetRay(int i, int j)
+    {
+        var offset = _sampleSquare();
+
+        var pixelSample = Pixel0 
+                          + (i + offset.X()) * PixelDeltaU
+                          + (j + offset.Y()) * PixelDeltaV;
+
+        return new Ray(Origin, pixelSample - Origin);
+    }
+
+    private static Vector3 _sampleSquare()
+    {
+        var r = Utils.GetRandom();
+        return new Vector3(Utils.RandomFloat(r) - .5f, Utils.RandomFloat(r) - .5f, 0f);
+    }
 }
