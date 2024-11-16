@@ -7,20 +7,20 @@ namespace Renderer;
 
 public static class ImageRenderer
 {
-    private static string[] Render(Viewport vp, Scene scene)
+    private static string[] Render(Camera cam, Scene scene)
     {
         Console.WriteLine("Image build started");
         Console.WriteLine("");
         
-        var numOfLines = (vp.Cam.ImageWidth * vp.Cam.ImageHeight) + 3;
+        var numOfLines = (cam.ImageWidth * cam.ImageHeight) + 3;
         var lines = new string[numOfLines];
         
         // PPM header information
         lines[0] = "P3";
-        lines[1] = vp.Cam.ImageWidth + " " + vp.Cam.ImageHeight;
+        lines[1] = cam.ImageWidth + " " + cam.ImageHeight;
         lines[2] = "255";
 
-        for (var j = 0; j < vp.Cam.ImageHeight; j++)
+        for (var j = 0; j < cam.ImageHeight; j++)
         {
             var curCursorLine = Console.CursorTop;
             
@@ -30,24 +30,24 @@ public static class ImageRenderer
             Console.SetCursorPosition(0, Console.CursorTop);
             
             // Writing new progress line
-            Console.Write("Lines remaining: " + (vp.Cam.ImageHeight - j) + " of " + numOfLines);
+            Console.Write("Lines remaining: " + (cam.ImageHeight - j) + " of " + numOfLines);
             
-            for (var i = 0; i < vp.Cam.ImageWidth; i++)
+            for (var i = 0; i < cam.ImageWidth; i++)
             {
-                var pixelCenter = vp.Pixel0 + (i * vp.PixelDeltaU) + (j * vp.PixelDeltaV);
-                var rayDir = pixelCenter - vp.Cam.Location;
-                var r = new Ray(vp.Cam.Location, rayDir);
+                var pixelCenter = cam.Pixel0 + (i * cam.PixelDeltaU) + (j * cam.PixelDeltaV);
+                var rayDir = pixelCenter - cam.Origin;
+                var r = new Ray(cam.Origin, rayDir);
 
                 var color = RayColor(r, scene);
         
-                lines[j * vp.Cam.ImageWidth + 3 + i] = WriteColor(color);
+                lines[j * cam.ImageWidth + 3 + i] = WriteColor(color);
             }
         }
 
         return lines;
     }
 
-    public static void RenderToFile(Viewport vp, Scene scene, string fileName)
+    public static void RenderToFile(Camera vp, Scene scene, string fileName)
     {
         var path = Directory.GetCurrentDirectory() + fileName;
         
@@ -68,10 +68,12 @@ public static class ImageRenderer
         var r = pixel.X();
         var g = pixel.Y();
         var b = pixel.Z();
-
-        int rByte = (int) (255.999 * r);
-        int gByte = (int) (255.999 * g);
-        int bByte = (int) (255.999 * b);
+        
+        var intensity = new Interval(0f, 0.999f);
+        
+        int rByte = (int) (256 * intensity.Clamp(r));
+        int gByte = (int) (256 * intensity.Clamp(g));
+        int bByte = (int) (256 * intensity.Clamp(b));
 
         return string.Join(" ", rByte, gByte, bByte);
 

@@ -38,4 +38,9 @@ public class Interval
     {
         return Min < x && x < Max;
     }
+
+    public float Clamp(float x)
+    { 
+        return x < Min ? Min : x > Max ? Max : x;
+    }
 }

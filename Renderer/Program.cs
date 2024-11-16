@@ -18,14 +18,12 @@ var imageHeight = (int)(imageWidth / aspectRatio);
 var focalLength = 1f;
 var viewportHeight = 2f;
 
-var camera = new Camera(imageWidth, imageHeight, focalLength, Vector3.Zero());
-
-var viewport = new Viewport(aspectRatio, viewportHeight, camera);
+var camera = new Camera(aspectRatio, focalLength, imageWidth, imageHeight, Vector3.Zero());
 
 var sphere1 = new Sphere(new Vector3(0f, 0f, -1f), 0.5f);
 var sphere2 = new Sphere(new Vector3(0f, -100.5f, -1f), 100f);
 
 var scene = new Scene(sphere1, sphere2);
 
-ImageRenderer.RenderToFile(viewport, scene, "/output/image.ppm");
+ImageRenderer.RenderToFile(camera, scene, "/output/image.ppm");
 
