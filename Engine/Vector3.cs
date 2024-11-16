@@ -30,7 +30,7 @@ public class Vector3
     public static Vector3 Random(float min, float max)
     {
         var r = Utils.GetRandom();
-
+        
         return new Vector3(Utils.RandomFloat(r, min, max), Utils.RandomFloat(r, min, max), Utils.RandomFloat(r, min, max));
     }
 
@@ -53,6 +53,30 @@ public class Vector3
     public static Vector3 Unit(Vector3 a)
     {
         return a / a.Length();
+    }
+
+    public static Vector3 UnitRandom()
+    {
+        // Randomly create a vector, if it lies within the unit sphere, we normalize it.
+        while (true)
+        {
+            var p = Random(-1, 1);
+            var lengthSquared = p.LengthSquared();
+            if (1e-80 < lengthSquared && lengthSquared <= 1)
+            {
+                return p / (float) Math.Sqrt(lengthSquared);
+            }
+        }
+    }
+
+    public static Vector3 UnitRandomOnHemisphere(Vector3 normal)
+    {
+        var onUnitSphere = UnitRandom();
+
+        if (Vector3.Dot(onUnitSphere, normal) > 0f)
+            return onUnitSphere;
+        
+        return -onUnitSphere;
     }
     
     public static Vector3 operator + (Vector3 a, Vector3 b)

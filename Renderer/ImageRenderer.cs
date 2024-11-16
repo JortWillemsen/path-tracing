@@ -19,8 +19,6 @@ public static class ImageRenderer
         lines[0] = "P3";
         lines[1] = cam.ImageWidth + " " + cam.ImageHeight;
         lines[2] = "255";
-
-        var samplesPerPixel = 100;
         
         for (var j = 0; j < cam.ImageHeight; j++)
         {
@@ -38,13 +36,13 @@ public static class ImageRenderer
             {
                 var pixelColor = Color.Zero();
 
-                for (int sample = 0; sample < samplesPerPixel; sample++)
+                for (int sample = 0; sample < cam.Samples; sample++)
                 {
                     var r = cam.GetRay(i, j);
-                    pixelColor += RayColor(r, scene);
+                    pixelColor += cam.RayColor(r, cam.MaxDepth, scene);
                 }
                 
-                lines[j * cam.ImageWidth + 3 + i] = WriteColor(1f / samplesPerPixel * pixelColor);
+                lines[j * cam.ImageWidth + 3 + i] = WriteColor(1f / cam.Samples * pixelColor);
             }
         }
 
@@ -81,20 +79,5 @@ public static class ImageRenderer
 
         return string.Join(" ", rByte, gByte, bByte);
 
-    }
-    
-    static Color RayColor(Ray r, Scene scene)
-    {
-        var hit = scene.Hit(r, new Interval(0f, Utils.Infinity));
-        
-        if (hit is SuccessRecord success)
-        {
-            return 0.5f * (success.Normal + new Vector3(1f, 1f, 1f));
-        }
-        
-        var unitDir = Vector3.Unit(r.Direction);
-
-        var a = .5f * (unitDir.Y() + 1f);
-        return (1f - a) * new Color(1f, 1f, 1f) + a * new Color(.5f, .7f, 1f );
     }
 }

@@ -12,18 +12,19 @@ const float aspectRatio = 16f / 9f;
 // TODO: ADD CHECK FOR INVALID DIMENSIONS
 var imageWidth = 400;
 var imageHeight = (int)(imageWidth / aspectRatio);
-
+var maxDepth = 50;
+var samples = 100;
 
 // Camera
 var focalLength = 1f;
 var viewportHeight = 2f;
 
-var camera = new Camera(aspectRatio, focalLength, imageWidth, imageHeight, Vector3.Zero());
+var camera = new Camera(aspectRatio, focalLength, imageWidth, imageHeight, maxDepth, samples,Vector3.Zero());
 
 var sphere1 = new Sphere(new Vector3(0f, 0f, -1f), 0.5f);
-var sphere2 = new Sphere(new Vector3(0f, -100.5f, -1f), 100f);
+var sphere2 = new Sphere(new Vector3(0f, -50.5f, -1f), 50f);
 
 var scene = new Scene(sphere1, sphere2);
 
-ImageRenderer.RenderToFile(camera, scene, "/output/image_aliased4.ppm");
+ImageRenderer.RenderToFile(camera, scene, "/output/image_diffused_lambertian.ppm");
 
