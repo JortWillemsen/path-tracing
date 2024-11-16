@@ -1,4 +1,5 @@
 ﻿using Engine;
+using Engine.Geometry;
 using Color = Engine.Vector3;
 
 namespace Renderer;
@@ -77,26 +78,17 @@ public static class ImageBuilder
     
     static Color RayColor(Ray r)
     {
-        if (HitSphere(new Vector3(0f, 0f, -1f), .5f, r))
+        var sphere = new Sphere(new Vector3(0f, 0f, -1f), .5f);
+        var t = sphere.Hit(r);
+        if (t > 0f)
         {
-            return new Color(1f, 0f, 0f);
+            var normal = Vector3.Unit(r.At(t) - new Vector3(0f, 0f, -1f));
+            return 0.5f * new Color(normal.X() + 1, normal.Y() + 1, normal.Z() + 1);
         }
         
-        var unitDir = r.Direction.Unit();
+        var unitDir = Vector3.Unit(r.Direction);
 
         var a = .5f * (unitDir.Y() + 1f);
         return (1f - a) * new Color(1f, 1f, 1f) + a * new Color(.5f, .6f, 1f );
-    }
-
-    static bool HitSphere(Vector3 center, float radius, Ray r)
-    {
-        var oc = center - r.Origin;
-
-        var a = Vector3.Dot(r.Direction, r.Direction);
-        var b = -2f * Vector3.Dot(r.Direction, oc);
-        var c = Vector3.Dot(oc, oc) - radius * radius;
-
-        var discriminant = b * b - 4 * a * c;
-        return discriminant >= 0;
     }
 }
