@@ -1,2 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+
+using PathTracer;
+
+const int imageWidth = 256;
+const int imageHeight = 256;
+
+ImageBuilder.Build(imageWidth, imageHeight);
