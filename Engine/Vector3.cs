@@ -20,6 +20,20 @@ public class Vector3
         return new Vector3(0f, 0f, 0f);
     }
 
+    public static Vector3 Random()
+    {
+        var r = Utils.GetRandom();
+
+        return new Vector3(Utils.RandomFloat(r), Utils.RandomFloat(r), Utils.RandomFloat(r));
+    }
+    
+    public static Vector3 Random(float min, float max)
+    {
+        var r = Utils.GetRandom();
+
+        return new Vector3(Utils.RandomFloat(r, min, max), Utils.RandomFloat(r, min, max), Utils.RandomFloat(r, min, max));
+    }
+
     public static float Dot(Vector3 a, Vector3 b)
     {
         return
