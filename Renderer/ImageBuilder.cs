@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using Engine;
+using Color = Engine.Vector3;
 
-namespace PathTracer;
+namespace Renderer;
 
 public static class ImageBuilder
 {
@@ -31,15 +32,12 @@ public static class ImageBuilder
             
             for (var i = 0; i < width; i++)
             {
-                var r = decimal.ToDouble(i) / (width - 1);
-                var g = decimal.ToDouble(j) / (height - 1);
-                var b = 0.0d;
-
-                var ir = (int) (255.999 * r);
-                var ig = (int) (255.999 * g);
-                var ib = (int) (255.999 * b);
+                var color = new Color(
+                    (float) i / (width - 1),
+                    (float) j / (height - 1),
+                    0.0f);
         
-                lines[j * width + 3 + i] = ir + " " + ig + " " +  ib;
+                lines[j * width + 3 + i] = WriteColor(color);
             }
         }
 
@@ -60,5 +58,19 @@ public static class ImageBuilder
         Console.WriteLine();
         Console.WriteLine("Image output finished at: \n");
         Console.WriteLine(path);
+    }
+
+    public static string WriteColor(Color pixel)
+    {
+        var r = pixel.X();
+        var g = pixel.Y();
+        var b = pixel.Z();
+
+        int rByte = (int) (255.999 * r);
+        int gByte = (int) (255.999 * g);
+        int bByte = (int) (255.999 * b);
+
+        return string.Join(" ", rByte, gByte, bByte);
+
     }
 }

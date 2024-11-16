@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using PathTracer;
+using Renderer;
 
 const int imageWidth = 256;
 const int imageHeight = 256;

@@ -11,4 +11,8 @@
       <Folder Include="output\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Engine\Engine.csproj" />
+    </ItemGroup>
+
 </Project>
