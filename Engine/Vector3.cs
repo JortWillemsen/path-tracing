@@ -36,9 +36,9 @@ public class Vector3
             a.X() * b.Y() - a.Y() * b.X());
     }
 
-    public Vector3 Unit()
+    public static Vector3 Unit(Vector3 a)
     {
-        return this / Length();
+        return a / a.Length();
     }
     
     public static Vector3 operator + (Vector3 a, Vector3 b)
