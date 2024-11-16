@@ -18,7 +18,7 @@ public class Sphere : Hittable
     }
     
     // Function that returns point on the ray where it hit the sphere. 
-    public HitRecord Hit(Ray r, float tMin, float tMax)
+    public HitRecord Hit(Ray r, Interval t)
     {
         // Calculate intersection point
         var oc = Center - r.Origin;
@@ -38,12 +38,12 @@ public class Sphere : Hittable
 
         var root = (h - squaredDiscriminant) / a;
 
-        // Find the nearest root that lies in the acceptable range
-        if (root <= tMin || tMax <= root)
+        // Find the nearest root that lies in the acceptable interval
+        if (!t.Surrounds(root))
         {
             root = (h + squaredDiscriminant) / a;
 
-            if (root <= tMin || tMax <= root)
+            if (!t.Surrounds(root))
                 return new FailRecord();
         }
 

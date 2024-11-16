@@ -2,7 +2,7 @@ namespace Engine.Geometry.Interfaces;
 
 public interface Hittable
 {
-    public HitRecord Hit(Ray r, float tMin, float tMax);
+    public HitRecord Hit(Ray r, Interval t);
 }
 
 public abstract class HitRecord { }

@@ -1,7 +1,7 @@
 using System.Collections;
 using Engine.Geometry.Interfaces;
 
-namespace Engine;
+namespace Engine.Geometry;
 
 public class Scene : Hittable
 {
@@ -17,15 +17,15 @@ public class Scene : Hittable
         Hittables.Add(obj);
     }
 
-    public HitRecord Hit(Ray r, float tMin, float tMax)
+    public HitRecord Hit(Ray r, Interval rayT)
     {
         HitRecord record = new FailRecord();
 
-        var closest = tMax;
+        var closest = rayT.Max;
 
         foreach (var obj in Hittables)
         {
-            if (obj.Hit(r, tMin, closest) is SuccessRecord success)
+            if (obj.Hit(r, new Interval(rayT.Min, closest)) is SuccessRecord success)
             {
                 closest = success.Length;
 

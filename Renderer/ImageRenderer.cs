@@ -79,7 +79,7 @@ public static class ImageRenderer
     
     static Color RayColor(Ray r, Scene scene)
     {
-        var hit = scene.Hit(r, 0f, Utils.Infinity);
+        var hit = scene.Hit(r, new Interval(0f, Utils.Infinity));
         
         if (hit is SuccessRecord success)
         {
