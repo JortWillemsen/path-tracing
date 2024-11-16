@@ -77,7 +77,26 @@ public static class ImageBuilder
     
     static Color RayColor(Ray r)
     {
-        // Return black for now
-        return Color.Zero();
+        if (HitSphere(new Vector3(0f, 0f, -1f), .5f, r))
+        {
+            return new Color(1f, 0f, 0f);
+        }
+        
+        var unitDir = r.Direction.Unit();
+
+        var a = .5f * (unitDir.Y() + 1f);
+        return (1f - a) * new Color(1f, 1f, 1f) + a * new Color(.5f, .6f, 1f );
+    }
+
+    static bool HitSphere(Vector3 center, float radius, Ray r)
+    {
+        var oc = center - r.Origin;
+
+        var a = Vector3.Dot(r.Direction, r.Direction);
+        var b = -2f * Vector3.Dot(r.Direction, oc);
+        var c = Vector3.Dot(oc, oc) - radius * radius;
+
+        var discriminant = b * b - 4 * a * c;
+        return discriminant >= 0;
     }
 }
