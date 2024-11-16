@@ -6,7 +6,11 @@ public static class ImageBuilder
 {
     private static string[] Build(int width, int height)
     {
-        var lines = new string[256*256 + 3];
+        Console.WriteLine("Image build started");
+        Console.WriteLine("");
+        
+        const int numOfLines = 256 * 256 + 3;
+        var lines = new string[numOfLines];
         
         // PPM header information
         lines[0] = "P3";
@@ -15,6 +19,16 @@ public static class ImageBuilder
 
         for (var j = 0; j < height; j++)
         {
+            var curCursorLine = Console.CursorTop;
+            
+            // Clearing previous progress line
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth)); 
+            Console.SetCursorPosition(0, Console.CursorTop);
+            
+            // Writing new progress line
+            Console.Write("Lines remaining: " + (height - j) + " of " + numOfLines);
+            
             for (var i = 0; i < width; i++)
             {
                 var r = decimal.ToDouble(i) / (width - 1);
@@ -32,14 +46,19 @@ public static class ImageBuilder
         return lines;
     }
 
-    public static void BuildToFile(int width, int height, string filePath)
+    public static void BuildToFile(int width, int height, string fileName)
     {
+        var path = Directory.GetCurrentDirectory() + fileName;
+        
         var lines = Build(width, height);
-        Console.WriteLine(Directory.GetCurrentDirectory());
-        using var outputFile = new StreamWriter(Directory.GetCurrentDirectory() + filePath);
+        using var outputFile = new StreamWriter(path);
         foreach (var line in lines)
         {
             outputFile.WriteLine(line);
         }
+        
+        Console.WriteLine();
+        Console.WriteLine("Image output finished at: \n");
+        Console.WriteLine(path);
     }
 }
