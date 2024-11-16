@@ -12,7 +12,7 @@ public class Vector3
     {
         this.E[0] = x;
         this.E[1] = y;
-        this.E[2] = x;
+        this.E[2] = z;
     }
 
     public float Dot(Vector3 a, Vector3 b)
