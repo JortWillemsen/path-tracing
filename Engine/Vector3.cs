@@ -15,6 +15,11 @@ public class Vector3
         this._e[2] = z;
     }
 
+    public static Vector3 Zero()
+    {
+        return new Vector3(0f, 0f, 0f);
+    }
+
     public float Dot(Vector3 a, Vector3 b)
     {
         return
