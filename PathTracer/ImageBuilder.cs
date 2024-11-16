@@ -1,10 +1,17 @@
-﻿namespace PathTracer;
+﻿using System.Text;
+
+namespace PathTracer;
 
 public static class ImageBuilder
 {
-    public static void Build(int width, int height)
+    private static string[] Build(int width, int height)
     {
-        Console.WriteLine("P3\n" + width + " " + height + "\n255\n");
+        var lines = new string[256*256 + 3];
+        
+        // PPM header information
+        lines[0] = "P3";
+        lines[1] = width + " " + height;
+        lines[2] = "255";
 
         for (int j = 0; j < height; j++)
         {
@@ -18,8 +25,21 @@ public static class ImageBuilder
                 int ig = (int) (255.999 * g);
                 int ib = (int) (255.999 * b);
         
-                Console.WriteLine(ir + " " + ig + " " +  "ib" + "\n");
+                lines[j * width + 3 + i] = ir + " " + ig + " " +  ib;
             }
+        }
+
+        return lines;
+    }
+
+    public static void BuildToFile(int width, int height, string filePath)
+    {
+        var lines = Build(width, height);
+        Console.WriteLine(Directory.GetCurrentDirectory());
+        using StreamWriter outputFile = new StreamWriter(Directory.GetCurrentDirectory() + filePath);
+        foreach (var line in lines)
+        {
+            outputFile.WriteLine(line);
         }
     }
 }
