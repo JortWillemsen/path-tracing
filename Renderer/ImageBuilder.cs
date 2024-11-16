@@ -1,5 +1,6 @@
 ﻿using Engine;
 using Engine.Geometry;
+using Engine.Geometry.Interfaces;
 using Color = Engine.Vector3;
 
 namespace Renderer;
@@ -78,12 +79,12 @@ public static class ImageBuilder
     
     static Color RayColor(Ray r)
     {
-        var sphere = new Sphere(new Vector3(0f, 0f, -1f), .5f);
-        var t = sphere.Hit(r);
-        if (t > 0f)
+        var sphere = new Sphere(new Vector3(0f, 0f, -1f), 1f);
+        var hit = sphere.Hit(r, 0f, float.MaxValue);
+        
+        if (hit is SuccessRecord success)
         {
-            var normal = Vector3.Unit(r.At(t) - new Vector3(0f, 0f, -1f));
-            return 0.5f * new Color(normal.X() + 1, normal.Y() + 1, normal.Z() + 1);
+            return 0.5f * new Color(success.Normal.X() + 1, success.Normal.Y() + 1, success.Normal.Z() + 1);
         }
         
         var unitDir = Vector3.Unit(r.Direction);

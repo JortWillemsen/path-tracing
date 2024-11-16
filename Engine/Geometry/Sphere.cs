@@ -1,30 +1,54 @@
+using Engine.Exceptions;
+using Engine.Geometry.Interfaces;
+
 namespace Engine.Geometry;
 
-public class Sphere
+public class Sphere : Hittable
 {
     public Vector3 Center { get; private set; }
     public float Radius { get; private set; }
 
     public Sphere(Vector3 center, float radius)
     {
+        if (radius <= 0)
+            throw new InvalidGeometryException("Radius of a sphere cannot be <= 0");
+        
         Center = center;
-        Radius = radius;
+        Radius = Math.Max(0, radius);
     }
     
     // Function that returns point on the ray where it hit the sphere. 
-    public float Hit(Ray r)
+    public HitRecord Hit(Ray r, float tMin, float tMax)
     {
-        var oc = Center - r.Origin;
+        // Calculate intersection point
+        var ip = Center - r.Origin;
 
-        var a = Vector3.Dot(r.Direction, r.Direction);
-        var b = -2f * Vector3.Dot(r.Direction, oc);
-        var c = Vector3.Dot(oc, oc) - Radius * Radius;
+        // Solve quadratic formula to determine hit
+        var a = r.Direction.LengthSquared();
+        var h = Vector3.Dot(r.Direction, ip);
+        var c = r.Direction.LengthSquared() - Radius * Radius;
 
-        var discriminant = b * b - 4 * a * c;
+        var discriminant = h * h - a * c;
 
+        // No hit
         if (discriminant < 0)
-            return -1f;
+            return new FailRecord();
 
-        return (-b - (float) Math.Sqrt(discriminant) ) / (2f * a);
+        var squaredDiscriminant =  (h - (float) Math.Sqrt(discriminant) ) / a;
+
+        var root = (h - squaredDiscriminant) / a;
+
+        // Find the nearest root that lies in the acceptable range
+        if (root <= tMin || tMax <= root)
+        {
+            root = (h + squaredDiscriminant) / a;
+
+            if (root <= tMin || tMax <= root)
+                return new FailRecord();
+        }
+
+        // We do hit
+        return new SuccessRecord(root, r.At(root), (r.At(root) - Center) / Radius);
+
     }
 }
