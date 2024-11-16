@@ -5,20 +5,20 @@ namespace Renderer;
 
 public static class ImageBuilder
 {
-    private static string[] Build(int width, int height)
+    private static string[] Build(Viewport vp)
     {
         Console.WriteLine("Image build started");
         Console.WriteLine("");
         
-        var numOfLines = (width * height) + 3;
+        var numOfLines = (vp.Cam.ImageWidth * vp.Cam.ImageHeight) + 3;
         var lines = new string[numOfLines];
         
         // PPM header information
         lines[0] = "P3";
-        lines[1] = width + " " + height;
+        lines[1] = vp.Cam.ImageWidth + " " + vp.Cam.ImageHeight;
         lines[2] = "255";
 
-        for (var j = 0; j < height; j++)
+        for (var j = 0; j < vp.Cam.ImageHeight; j++)
         {
             var curCursorLine = Console.CursorTop;
             
@@ -28,27 +28,28 @@ public static class ImageBuilder
             Console.SetCursorPosition(0, Console.CursorTop);
             
             // Writing new progress line
-            Console.Write("Lines remaining: " + (height - j) + " of " + numOfLines);
+            Console.Write("Lines remaining: " + (vp.Cam.ImageHeight - j) + " of " + numOfLines);
             
-            for (var i = 0; i < width; i++)
+            for (var i = 0; i < vp.Cam.ImageWidth; i++)
             {
-                var color = new Color(
-                    (float) i / (width - 1),
-                    (float) j / (height - 1),
-                    0.0f);
+                var pixelCenter = vp.Pixel0 + (i * vp.PixelDeltaU) + (j * vp.PixelDeltaV);
+                var rayDir = pixelCenter - vp.Cam.Location;
+                var r = new Ray(vp.Cam.Location, rayDir);
+
+                var color = RayColor(r);
         
-                lines[j * width + 3 + i] = WriteColor(color);
+                lines[j * vp.Cam.ImageWidth + 3 + i] = WriteColor(color);
             }
         }
 
         return lines;
     }
 
-    public static void BuildToFile(int width, int height, string fileName)
+    public static void BuildToFile(Viewport vp, string fileName)
     {
         var path = Directory.GetCurrentDirectory() + fileName;
         
-        var lines = Build(width, height);
+        var lines = Build(vp);
         using var outputFile = new StreamWriter(path);
         foreach (var line in lines)
         {
@@ -72,5 +73,11 @@ public static class ImageBuilder
 
         return string.Join(" ", rByte, gByte, bByte);
 
+    }
+    
+    static Color RayColor(Ray r)
+    {
+        // Return black for now
+        return Color.Zero();
     }
 }
