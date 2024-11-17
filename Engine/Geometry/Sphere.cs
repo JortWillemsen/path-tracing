@@ -1,14 +1,15 @@
 using Engine.Exceptions;
 using Engine.Geometry.Interfaces;
+using Engine.Materials;
 
 namespace Engine.Geometry;
 
-public class Sphere : Hittable
+public class Sphere : Geometry
 {
     public Vector3 Center { get; private set; }
     public float Radius { get; private set; }
 
-    public Sphere(Vector3 center, float radius)
+    public Sphere(Vector3 center, float radius, Material material) : base(material)
     {
         if (radius <= 0)
             throw new InvalidGeometryException("Radius of a sphere cannot be <= 0");
@@ -18,7 +19,8 @@ public class Sphere : Hittable
     }
     
     // Function that returns point on the ray where it hit the sphere. 
-    public HitRecord Hit(Ray r, Interval t)
+
+    public override HitRecord Hit(Ray r, Interval t)
     {
         // Calculate intersection point
         var oc = Center - r.Origin;
@@ -52,7 +54,8 @@ public class Sphere : Hittable
             root, 
             r.At(root), 
             (r.At(root) - Center) / Radius, 
-            r);
+            r,
+            this);
 
     }
 }

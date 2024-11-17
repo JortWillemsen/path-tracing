@@ -1,3 +1,5 @@
+using Engine.Materials;
+
 namespace Engine.Geometry.Interfaces;
 
 public interface Hittable
@@ -13,12 +15,14 @@ public class SuccessRecord : HitRecord
     public Vector3 Point { get; private set; }
     public Vector3 Normal { get; private set; }
     public bool FrontFacing { get; private set; }
+    public Geometry Geometry { get; private set; }
 
-    public SuccessRecord(float length, Vector3 point, Vector3 outwardNormal, Ray r)
+    public SuccessRecord(float length, Vector3 point, Vector3 outwardNormal, Ray r, Geometry geometry)
     {
         Length = length;
         Point = point;
         Normal = outwardNormal;
+        Geometry = geometry;
         SetFaceNormal(outwardNormal, r);
     }
 

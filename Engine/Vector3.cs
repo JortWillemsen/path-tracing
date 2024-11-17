@@ -50,6 +50,17 @@ public class Vector3
             a.X() * b.Y() - a.Y() * b.X());
     }
 
+    public Vector3 Reflect(Vector3 normal)
+    {
+        return this - 2 * Dot(this, normal) * normal;
+    }
+    
+    public bool NearZero()
+    {
+        const float s = 1e-8f;
+        return Math.Abs(_e[0]) < s && Math.Abs(_e[1]) < s && Math.Abs(_e[2]) < s;
+    }
+
     public static Vector3 Unit(Vector3 a)
     {
         return a / a.Length();

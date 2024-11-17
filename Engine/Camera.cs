@@ -59,16 +59,15 @@ public class Camera
     public Vector3 RayColor(Ray r, int depth, Scene scene)
     {
         if (depth <= 0)
-        {
             return Vector3.Zero();
-        }
         
         var hit = scene.Hit(r, new Interval(0.001f, Utils.Infinity));
         
         if (hit is SuccessRecord success)
         {
-            var dir = success.Normal + Vector3.UnitRandom();
-            return 0.5f * RayColor(new Ray(success.Point, dir), depth - 1, scene);
+            var scatter = success.Geometry.Mat.Scatter(r, success);
+
+            return scatter.Albedo * RayColor(scatter.Outgoing, depth - 1, scene);
         }
         
         var unitDir = Vector3.Unit(r.Direction);

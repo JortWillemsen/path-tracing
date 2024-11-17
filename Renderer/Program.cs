@@ -2,6 +2,7 @@
 
 using Engine;
 using Engine.Geometry;
+using Engine.Materials;
 using Renderer;
 
 using Color = Engine.Vector3;
@@ -21,10 +22,18 @@ var viewportHeight = 2f;
 
 var camera = new Camera(aspectRatio, focalLength, imageWidth, imageHeight, maxDepth, samples,Vector3.Zero());
 
-var sphere1 = new Sphere(new Vector3(0f, 0f, -1f), 0.5f);
-var sphere2 = new Sphere(new Vector3(0f, -50.5f, -1f), 50f);
+var matGround = new LambertianDiffuse(new Vector3(0.8f, 0.8f, 0f), 0.5f);
+var matCenter = new LambertianDiffuse(new Vector3(0.1f, 0.2f, 0.5f), 0.5f);
+var matLeft = new Reflective(new Vector3(0.8f, 0.8f, 0.8f));
+var matRight = new Reflective(new Vector3(0.8f, 0.6f, 0.2f));
 
-var scene = new Scene(sphere1, sphere2);
+var sphere1 = new Sphere(new Vector3(0f, -100.5f, -1f), 100f, matGround);
+var sphere2 = new Sphere(new Vector3(0f, 0f, -1.2f), 0.5f, matCenter);
+var sphere3 = new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, matLeft);
+var sphere4 = new Sphere(new Vector3(1f, 0f, -1f), 0.5f, matRight);
+
+
+var scene = new Scene(sphere1, sphere2, sphere3, sphere4);
 
 ImageRenderer.RenderToFile(camera, scene, "/output/" + args[0]);
 
