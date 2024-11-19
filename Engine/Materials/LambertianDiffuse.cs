@@ -24,7 +24,7 @@ public class LambertianDiffuse : Material
         if (scatterDir.NearZero())
             scatterDir = rec.Normal;
         
-        return new Scatter
+        return new DoScatter
         {
             Albedo = Absorption * Albedo,
             Outgoing = new Ray(rec.Point, scatterDir)

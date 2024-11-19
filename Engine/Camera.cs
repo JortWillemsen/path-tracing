@@ -1,6 +1,7 @@
 using System.Drawing;
 using Engine.Geometry;
 using Engine.Geometry.Interfaces;
+using Engine.Materials;
 
 namespace Engine;
 
@@ -66,8 +67,11 @@ public class Camera
         if (hit is SuccessRecord success)
         {
             var scatter = success.Geometry.Mat.Scatter(r, success);
+            
+            if (scatter is DoScatter doScatter)
+                return scatter.Albedo * RayColor(doScatter.Outgoing, depth - 1, scene);
 
-            return scatter.Albedo * RayColor(scatter.Outgoing, depth - 1, scene);
+            return Vector3.Zero();
         }
         
         var unitDir = Vector3.Unit(r.Direction);
