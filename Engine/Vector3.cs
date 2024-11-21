@@ -55,6 +55,14 @@ public class Vector3
         return this - 2 * Dot(this, normal) * normal;
     }
     
+    public Vector3 Refract(Vector3 n, float rIndex) {
+        var cosTheta = Math.Min(Vector3.Dot(-this, n), 1f);
+        var rOutPerp =  rIndex * (this + cosTheta * n);
+        
+        var rOutParallel = - (float) Math.Sqrt(Math.Abs(1f - rOutPerp.LengthSquared())) * n;
+        return rOutPerp + rOutParallel;
+    }
+    
     public bool NearZero()
     {
         const float s = 1e-8f;
